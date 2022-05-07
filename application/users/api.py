@@ -1,6 +1,6 @@
 from functools import cached_property
 
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -20,6 +20,8 @@ class UserSignupApi(APIView):
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        print(self.service.signup(**serializer.validated_data))
+        self.service.signup(
+            **serializer.validated_data
+        )
 
-        return Response(200)
+        return Response(status=status.HTTP_201_CREATED)
