@@ -41,7 +41,7 @@ USE_TZ = True
 # INSTALLED_APPS
 DEVELOP_APPS = [
     'django_extensions',
-    'apps',
+    'application',
 
 ]
 
