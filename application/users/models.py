@@ -1,42 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager as BUM,
     PermissionsMixin,
     AbstractBaseUser
 )
-
-
-class UserManager(BUM):
-
-    def create_user(self, userid, password):
-        user = self.model(
-            userid=userid,
-            is_active=True,
-            is_admin=False
-        )
-
-        if password is not None:
-            user.set_password(password)
-        else:
-            user.set_unusable_password()
-
-        user.full_clean()
-        user.save(using=self._db)
-
-        return user
-
-    def create_superuser(self, userid, password):
-        user = self.model(
-            userid=userid,
-            password=password,
-            is_active=True,
-            is_admin=True,
-        )
-
-        user.is_superuser = True
-        user.save(using=self._db)
-
-        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -56,8 +22,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
         null=True
     )
-
-    objects = BUM()
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

@@ -15,11 +15,12 @@ class UserService(metaclass=ABCMeta):
         return User.objects.delete(user_id=user_id)
 
     def create_user(self, userid, password):
-        user = self.model(user_id=userid, is_active=True, is_admin=False)
+        user = self.model(
+            user_id=userid, is_active=True, is_admin=False
+        )
         user.set_password(password)
-        user.set_unusable_password()
-        user.full_clean()
         user.save()
+
         return user
 
 
