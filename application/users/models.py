@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    user_id = models.CharField(
+    userid = models.CharField(
         verbose_name="userid",
         max_length=12,
         unique=True
@@ -28,7 +28,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    USERNAME_FIELD = 'user_id'
+
+    USERNAME_FIELD = 'userid'
 
     def __str__(self):
-        return self.user_id
+        return self.userid
+
+    class Meta:
+        db_table = "user"

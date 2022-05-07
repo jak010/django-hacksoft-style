@@ -5,5 +5,9 @@ from .api import (
 )
 
 urlpatterns = [
-    path("signup", UserSignupApi.as_view())
+    
+    path(
+        route="signup",
+        view=UserSignupApi.as_view()
+    )
 ]

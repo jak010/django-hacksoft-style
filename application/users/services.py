@@ -1,22 +1,29 @@
 from abc import ABCMeta
 from .models import User
 
+from django.db import transaction
+from django.db.models import QuerySet
+
 
 class UserService(metaclass=ABCMeta):
     model = User
 
-    def find_by_pk(self, user_id) -> User:
-        return User.objects.get(user_id=user_id)
+    def find_by_pk(self, userid) -> User:
+        try:
+            user = self.model.objects.get(userid=userid)
+        except self.model.DoesNotExist:
+            return None
+        return user
 
-    def filter_by_pk(self, user_id):
-        return User.objects.filter(user_id=user_id)
+    def filter_by_pk(self, userid) -> QuerySet:
+        return self.model.objects.filter(userid=userid)
 
-    def delete_by_pk(self, user_id):
-        return User.objects.delete(user_id=user_id)
+    def delete_by_pk(self, userid):
+        return self.model.objects.delete(userid=userid)
 
     def create_user(self, userid, password):
         user = self.model(
-            user_id=userid, is_active=True, is_admin=False
+            userid=userid, is_active=True, is_admin=False
         )
         user.set_password(password)
         user.save()
@@ -26,16 +33,11 @@ class UserService(metaclass=ABCMeta):
 
 class UserSignupService(UserService):
 
+    @transaction.atomic
     def signup(self, userid, password):
-        if self.filter_by_pk(user_id=userid):
-            raise Exception("Duplicate USer")
+        user = self.filter_by_pk(userid=userid)
 
-        self.create_user(userid=userid, password=password)
+        if not user:
+            self.create_user(userid=userid, password=password)
 
-        return True
-
-    def _validator_userid(self, userid):
-        return True
-
-    def _validator_password(self, password):
-        return True
+        return user
