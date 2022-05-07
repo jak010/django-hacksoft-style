@@ -6,8 +6,41 @@ from django.contrib.auth.models import (
 )
 
 
-class User(BUM, AbstractBaseUser, PermissionsMixin):
-    userid = models.CharField(
+class UserManager(BUM):
+
+    def create_user(self, userid, password):
+        user = self.model(
+            userid=userid,
+            is_active=True,
+            is_admin=False
+        )
+
+        if password is not None:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
+
+        user.full_clean()
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, userid, password):
+        user = self.model(
+            userid=userid,
+            password=password,
+            is_active=True,
+            is_admin=True,
+        )
+
+        user.is_superuser = True
+        user.save(using=self._db)
+
+        return user
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    user_id = models.CharField(
         verbose_name="userid",
         max_length=12,
         unique=True
@@ -24,11 +57,11 @@ class User(BUM, AbstractBaseUser, PermissionsMixin):
         null=True
     )
 
-    is_active = True
-    USERNAME_FIELD = 'email'
+    object = BUM()
+
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    USERNAME_FIELD = 'user_id'
 
     def __str__(self):
-        return self.userid
-
-    def is_staff(self):
-        return self.is_admin
+        return self.user_id

@@ -18,7 +18,8 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '9901',
         'OPTIONS': {
-            'charset': 'utf8mb4'
+            'charset': 'utf8mb4',
+            # 'collation': 'utf8_general_ci',
         },
         # 'TEST': { # 테스트를 django test로 할 거면 주석 해제 후 사용
         #     'CHARSET': 'utf8',
@@ -37,15 +38,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-# INSTALLED_APPS
-DEVELOP_APPS = [
-    'django_extensions',
-    'application',
-
-]
-
-INSTALLED_APPS = INSTALLED_APPS + DEVELOP_APPS
 
 # SQL LOGGING
 LOGGING = {

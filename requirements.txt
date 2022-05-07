@@ -7,3 +7,4 @@ mysqlclient==2.1.0
 Pygments==2.11.2
 pytz==2022.1
 sqlparse==0.4.2
+djangorestframework

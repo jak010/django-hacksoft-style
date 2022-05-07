@@ -21,7 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 ALLOWED_HOSTS = ['*']
 
-# Application definition
+LOCAL_APPS = [
+    "application.api.apps.ApiConfig",
+    "application.users.apps.UsersConfig",
+]
+THIRD_PARTY_APPS = [
+    'rest_framework',
+    'django_extensions',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    *LOCAL_APPS,
+    *THIRD_PARTY_APPS
 ]
 
 MIDDLEWARE = [
@@ -89,3 +98,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User'
