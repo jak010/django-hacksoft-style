@@ -1,18 +1,23 @@
 from abc import ABCMeta
-from .models import User
+from typing import Optional
 
 from django.db import transaction
 from django.db.models import QuerySet
 
+from application.users.models import User
+
+from application.api.types import DjangoModelType
+
 
 class UserService(metaclass=ABCMeta):
-    model = User
+    model: DjangoModelType = User  # Generic 타입 없을 떄 18번라인 Warning 뜸
 
-    def find_by_pk(self, userid) -> User:
+    def find_by_pk(self, userid) -> Optional[model]:
         try:
             user = self.model.objects.get(userid=userid)
         except self.model.DoesNotExist:
             return None
+
         return user
 
     def filter_by_pk(self, userid) -> QuerySet:
