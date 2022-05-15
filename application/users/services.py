@@ -10,7 +10,7 @@ from application.api.types import DjangoModelType
 
 
 class UserService(metaclass=ABCMeta):
-    model: DjangoModelType = User  # Generic 타입 없을 떄 18번라인 Warning 뜸
+    model: DjangoModelType = User  # Generic 타입 없을 떄 19번라인 Warning 뜸
 
     def find_by_pk(self, userid) -> Optional[model]:
         try:
@@ -31,15 +31,25 @@ class UserService(metaclass=ABCMeta):
             userid=userid, is_active=True, is_admin=False
         )
         user.set_password(password)
+        user.full_clean()
         user.save()
 
         return user
+
+    @staticmethod
+    def get_user_data(user: User):
+        return {
+            'userid': user.userid,
+            'is_admin': user.is_admin,
+            'is_active': user.is_active
+        }
 
 
 class UserSignupService(UserService):
 
     @transaction.atomic
     def signup(self, userid, password):
+        """ 사용자 생성하기 """
         user = self.filter_by_pk(userid=userid)
 
         if not user:

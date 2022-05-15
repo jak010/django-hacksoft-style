@@ -55,7 +55,11 @@ class UserSessionLoginApi(APIView):
         login(request, user)
 
         return Response({
-            'session': request.session.session_key,
+            'session': {
+                'id': request.session.session_key,
+                'expiry_age': request.session.get_expiry_age(),
+                'expiry_date': request.session.get_expiry_date()
+            },
             'data': self.service.get_user_data(user=user)
         })
 
