@@ -1,6 +1,8 @@
 from abc import ABCMeta
 from .models import User
 
+from application.users.models import User
+
 
 class UserService(metaclass=ABCMeta):
     model = User
@@ -22,6 +24,14 @@ class UserService(metaclass=ABCMeta):
         user.save()
 
         return user
+
+    def get_user_data(self, user: User):
+        return {
+            'userid': user.userid,
+            'is_active': user.is_active,
+            'is_admin': user.is_admin,
+            'is_superuser': user.is_superuser,
+        }
 
 
 class UserSignupService(UserService):
