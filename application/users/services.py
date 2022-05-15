@@ -4,7 +4,7 @@ from typing import Optional
 from django.db import transaction
 from django.db.models import QuerySet
 
-from application.users.models import User
+from application.users.models import User, UserProfile
 
 from application.api.types import DjangoModelType
 
@@ -56,3 +56,15 @@ class UserSignupService(UserService):
             self.create_user(userid=userid, password=password)
 
         return user
+
+
+class UserProfileService:
+    model: DjangoModelType = UserProfile
+
+    def find_by(self, user):
+        try:
+            user_profile = self.model.objects.get(user=user)
+        except self.model.DoesNotExist:
+            return None
+
+        return user_profile

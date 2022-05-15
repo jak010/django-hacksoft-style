@@ -3,7 +3,8 @@ from django.urls import path
 from .api import (
     UserSignupApi,
     UserSessionLoginApi,
-    UserProfileApi
+    UserProfileApi,
+    UserProfileUpdateApi
 )
 
 urlpatterns = [
@@ -19,6 +20,10 @@ urlpatterns = [
     path(
         route="session/profile",
         view=UserProfileApi.as_view()
+    ),
+    path(
+        route="session/profile/update",
+        view=UserProfileUpdateApi.as_view()
     )
 
 ]

@@ -1,3 +1,3 @@
-# About
+# Over View
 
--  Django RestFrameWork HackSoftStyle 적용해보기
+- Django RestFrameWork HackSoftStyle 적당히 적용해보기
