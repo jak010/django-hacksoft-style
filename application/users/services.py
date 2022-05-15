@@ -1,20 +1,20 @@
 from abc import ABCMeta
-from .models import User
 
 from application.users.models import User
+from application.api.ServiceImpl import BaseService
 
 
-class UserService(metaclass=ABCMeta):
-    model = User
+class UserService(BaseService):
+    model: User = User
 
-    def find_by_pk(self, user_id) -> User:
-        return User.objects.get(user_id=user_id)
+    def find_by(self, userid):
+        return User.objects.get(userid=userid)
 
-    def filter_by_pk(self, user_id):
-        return User.objects.filter(user_id=user_id)
+    def filter_by(self, userid):
+        return User.objects.filter(userid=userid)
 
-    def delete_by_pk(self, user_id):
-        return User.objects.delete(user_id=user_id)
+    def delete_by(self, userid):
+        return User.objects.delete(user_id=userid)
 
     def create_user(self, userid, password):
         user = self.model(
@@ -37,7 +37,7 @@ class UserService(metaclass=ABCMeta):
 class UserSignupService(UserService):
 
     def signup(self, userid, password):
-        if self.filter_by_pk(user_id=userid):
+        if self.filter_by(userid=userid):
             raise Exception("Duplicate USer")
 
         self.create_user(userid=userid, password=password)

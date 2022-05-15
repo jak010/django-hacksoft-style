@@ -62,7 +62,12 @@ class UserSessionLoginApi(APIView):
 
 class UserProfileApi(ApiAuthMixin, APIView):
 
-    def get(self, request):
-        print(request.user)
+    @cached_property
+    def service(self) -> UserService:
+        return UserService()
 
-        return Response(200)
+    def get(self, request):
+        data = self.service \
+            .get_user_data(user=request.user)
+
+        return Response(data)
