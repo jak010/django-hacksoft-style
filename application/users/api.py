@@ -58,3 +58,11 @@ class UserSessionLoginApi(APIView):
             'session': request.session.session_key,
             'data': self.service.get_user_data(user=user)
         })
+
+
+class UserProfileApi(ApiAuthMixin, APIView):
+
+    def get(self, request):
+        print(request.user)
+
+        return Response(200)

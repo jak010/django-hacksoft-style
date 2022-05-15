@@ -3,6 +3,7 @@
 # CsrfExemptedSessionAuthentication
 from importlib import import_module
 from django.conf import settings
+from django.contrib import auth
 
 from rest_framework.permissions import IsAuthenticated, BasePermission
 
@@ -32,12 +33,13 @@ class SessionAsHeaderAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
         auth_header = self._get_auth_header(request.headers)
-
         if auth_header is None:
             return None
 
         auth_type, auth_value = auth_header
 
+        # 헤더 요청 예제
+        ## Authorization: Session ....
         if auth_type != "Session":
             return None
 
@@ -46,7 +48,7 @@ class SessionAsHeaderAuthentication(BaseAuthentication):
         session_key = auth_value
 
         request.session = SessionStore(session_key)
-        user = auth_value.get_user(request)
+        user = auth.get_user(request)
 
         return user, None
 
