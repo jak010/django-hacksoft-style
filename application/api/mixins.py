@@ -51,6 +51,7 @@ class SessionAsHeaderAuthentication(BaseAuthentication):
         user = auth.get_user(request)
 
         return user, None
+        # return request, None
 
 
 class ApiAuthMixin:

@@ -71,11 +71,18 @@ class UserProfileApi(ApiAuthMixin, APIView):
         return UserProfileService()
 
     def get(self, request):
-        user_profile = self.service.find_by(user=request.user)
-        print(user_profile)
-        # print(self.service.get_user_profile(user=user_profile.user))
+        """ user 프로필 조회 """
+        user_profile = self.service.get_user_profile(user=request.user)
 
-        return Response()
+        data = {
+            'user': {
+                'userid': request.user.userid,
+                'last_login': request.user.last_login
+            },
+            'profile': user_profile
+        }
+
+        return Response(data)
 
 
 class UserProfileUpdateApi(ApiAuthMixin, APIView):
