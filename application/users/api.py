@@ -67,14 +67,15 @@ class UserSessionLoginApi(APIView):
 class UserProfileApi(ApiAuthMixin, APIView):
 
     @cached_property
-    def service(self) -> UserService:
-        return UserService()
+    def service(self) -> UserProfileService:
+        return UserProfileService()
 
     def get(self, request):
-        data = self.service \
-            .get_user_data(user=request.user)
+        user_profile = self.service.find_by(user=request.user)
+        print(user_profile)
+        # print(self.service.get_user_profile(user=user_profile.user))
 
-        return Response(data)
+        return Response()
 
 
 class UserProfileUpdateApi(ApiAuthMixin, APIView):
@@ -87,16 +88,17 @@ class UserProfileUpdateApi(ApiAuthMixin, APIView):
 
     def put(self, request):
         """ 유저 프로필 업데이트하기 """
-        from application.users.models import UserProfile
-
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         user_profile = self.service.find_by(user=request.user)
         if user_profile is None:
-            UserProfile(user=request.user.id, **serializer.validated_data)
-        else:
-            user_profile.description = serializer.validated_data['description']
-            user_profile.save()
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return Response(200)
+        # UserProfile이 있을때만 업데이트함
+        self.service.update_profile(
+            user=request.user,
+            **serializer.validated_data
+        )
+
+        return Response()

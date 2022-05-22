@@ -68,3 +68,28 @@ class UserProfileService:
             return None
 
         return user_profile
+
+    def get_user_profile(self, user):
+
+        user_profile = self.model.objects.select_related("users").filter(user=user)
+        print(user_profile)
+        # return {
+        #     'description': user_profile.description,
+        #     'date_of_birth': user_profile.date_of_birth,
+        #     'created_at': user_profile.created_at,
+        #     'updated_at': user_profile.updated_at
+        # }
+
+    @transaction.atomic
+    def create_profile(self, user, **kwargs):
+        self.model.objects.create(
+            user=user,
+            **kwargs
+        )
+
+    @transaction.atomic
+    def update_profile(self, user, **kwargs):
+        self.model.objects.update(
+            user=user,
+            **kwargs
+        )

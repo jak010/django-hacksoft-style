@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
     AbstractBaseUser
 )
+from django.utils.translation import gettext_lazy as _
 
 from application.common.models import BaseModel
 
@@ -30,6 +31,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(
+        _('superuser status'),
+        default=False,
+        help_text=_(
+            'Designates that this user has all permissions without '
+            'explicitly assigning them.'
+        ),
+    )
 
     USERNAME_FIELD = 'userid'
 
@@ -41,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserProfile(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     description = models.TextField(max_length=65535)
     date_of_birth = models.DateField(null=True)
 

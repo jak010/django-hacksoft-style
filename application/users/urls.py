@@ -4,7 +4,8 @@ from .api import (
     UserSignupApi,
     UserSessionLoginApi,
     UserProfileApi,
-    UserProfileUpdateApi
+    UserProfileUpdateApi,
+
 )
 
 urlpatterns = [
