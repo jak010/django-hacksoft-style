@@ -72,11 +72,21 @@ class UserProfileService:
     def get_user_profile(self, user):
         user_profile = self.model.objects.get(user=user)
 
+        if user_profile is None:
+            return None
+
         return {
-            'description': user_profile.description,
-            'date_of_birth': user_profile.date_of_birth,
-            'created_at': user_profile.created_at,
-            'updated_at': user_profile.updated_at
+            'user': {
+                'userid': user.userid,
+                'last_login': user.last_login
+            },
+            "profile": {
+                'description': user_profile.description,
+                'date_of_birth': user_profile.date_of_birth,
+                'created_at': user_profile.created_at,
+                'updated_at': user_profile.updated_at
+            }
+
         }
 
     @transaction.atomic

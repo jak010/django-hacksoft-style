@@ -74,15 +74,10 @@ class UserProfileApi(ApiAuthMixin, APIView):
         """ user 프로필 조회 """
         user_profile = self.service.get_user_profile(user=request.user)
 
-        data = {
-            'user': {
-                'userid': request.user.userid,
-                'last_login': request.user.last_login
-            },
-            'profile': user_profile
-        }
+        if user_profile is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return Response(data)
+        return Response(user_profile)
 
 
 class UserProfileUpdateApi(ApiAuthMixin, APIView):
